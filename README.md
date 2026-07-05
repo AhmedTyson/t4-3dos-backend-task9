@@ -6,6 +6,7 @@
 ![Session](https://img.shields.io/badge/session-Task_9-4F5B93?style=flat-square)
 
 <br />
+Action required:
 
 RESTful API for [**project name — TBD**] built by **Team 4 Backend**. Delivers authenticated endpoints with JWT, role-based authorization (Admin/User), paginated collections, Redis caching, validated requests, and interactive API docs via Scramble. Frontend team consumes JSON responses at `/api/*` — full endpoint reference available at `/docs/api` after setup.
 
