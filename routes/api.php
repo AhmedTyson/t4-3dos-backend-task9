@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 // ==========================================
@@ -27,11 +28,16 @@ Route::middleware('auth:api')->group(function () {
 });
 
 // ==========================================
-// Ahmed's Scope: Admin Orders & Reports
+// Ahmed & Rana's Scope: Admin Module
 // ==========================================
-Route::middleware(['auth:api', 'isAdmin'])->prefix('admin')->group(function () {
-    Route::get('orders', [AdminOrderController::class, 'index']);
-    Route::put('orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
-    Route::get('orders/{order}/print-file', [AdminOrderController::class, 'printFile']);
-    Route::get('reports/sales', [AdminOrderController::class, 'salesReport']);
+Route::middleware(['auth:api', 'isAdmin'])->group(function () {
+    Route::prefix('admin')->group(function () {
+        Route::get('orders', [AdminOrderController::class, 'index']);
+        Route::put('orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
+        Route::get('orders/{order}/print-file', [AdminOrderController::class, 'printFile']);
+        Route::get('reports/sales', [AdminOrderController::class, 'salesReport']);
+    });
+
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 });
