@@ -1,20 +1,27 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\OrderController;
 
-// Auth routes (Tymon JWT)
-Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
 
-Route::middleware(['auth:api'])->group(function () {
+// Auth
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth:api')->group(function () {
+
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Orders
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+   Route::middleware('auth:api')->group(function () {
+
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+
 });
 
-Route::middleware(['auth:api', 'isAdmin'])->group(function () {
-    //
 });
-// Cart routes
-// Order routes
-// Admin routes
