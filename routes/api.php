@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PasswordController;
@@ -26,6 +27,7 @@ Route::middleware(['auth:api'])->group(function () {
 
 Route::middleware(['auth:api', 'isAdmin'])->group(function () {
     Route::prefix('admin')->group(function () {
+        Route::get('users',                     [AdminUserController::class, 'index'])->middleware('cache.json:5');
         Route::get('orders',                    [AdminOrderController::class, 'index'])->middleware('cache.json:10');
         Route::put('orders/{order}/status',     [AdminOrderController::class, 'updateStatus']);
         Route::get('orders/{order}/print-file', [AdminOrderController::class, 'printFile']);
