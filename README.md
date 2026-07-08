@@ -163,16 +163,27 @@ REDIS_PORT=6379
 
 | Phase | Status | Description |
 |-------|--------|-------------|
-| 1 | Completed | Project setup, migrations, seeders, models |
-| 2 | Completed | Auth guard (JWT), enums, review fixes |
-| 3 | Upcoming | AuthController (register, login, logout, me, refresh) |
-| 4 | Upcoming | ProductController (CRUD, pagination, filtration) |
-| 5 | Upcoming | CartController (show, add, update, remove) |
-| 6 | Upcoming | OrderController (place, list, show) |
-| 7 | Upcoming | AdminController (manage users, products, orders) |
-| 8 | Upcoming | Form request validation, policies |
-| 9 | Upcoming | Redis caching layer |
-| 10 | Upcoming | API docs (Scramble), tests |
+| 1 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | Project setup, migrations, seeders, models |
+| 2 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | Auth guard (JWT), enums, review fixes |
+| 3 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | AuthController (register, login, logout, me, refresh) & Password Reset UI |
+| 4 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | ProductController (CRUD, pagination, dynamic query filtration) |
+| 5 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | CartController (show, add, update, remove) |
+| 6 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | OrderController (transactional checkout, list, show, cancel) |
+| 7 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | AdminController (manage users, orders, dynamic status transitions) |
+| 8 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | Form request validation, policies, and gate authorizations |
+| 9 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | Redis caching layer (`CacheJsonResponse` middleware) |
+| 10 | <img src="https://api.iconify.design/lucide:check-circle-2.svg?color=%2310B981" width="18" align="text-bottom" /> Completed | API docs (Scramble), E2E Tests, PDF/XLSX Report Generation |
+
+---
+
+## <img src="https://api.iconify.design/lucide:sparkles.svg?color=%238A2BE2" width="24" align="top" /> Highlighted Features
+
+- **Automated API Documentation**: Interactive, real-time OpenAPI docs available out-of-the-box via Dedoc Scramble.
+- **Advanced Caching Middleware**: Custom `cache.json` middleware intercepts, caches, and automatically resolves API responses via Redis.
+- **Beautiful Password Reset UI**: Features custom Tailwind CSS layouts, live JS requirement validation, and custom SVG animations replacing standard static blades.
+- **Enterprise Reporting**: Implements PDF generation (via DOMPDF) and XLSX export (via OpenSpout) for sales reports and order receipts.
+- **Transactional Integrity**: Cart-to-Order pipelines are wrapped in secure `DB::transaction()` blocks to guarantee data consistency.
+- **Clean Architecture**: Razor-thin controllers leveraging Dedicated Resource Collections, FormRequests, and Eloquent Scopes.
 
 ---
 
