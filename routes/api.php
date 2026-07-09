@@ -4,12 +4,11 @@ use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
-use Intervention\Image\Laravel\Facades\Image;
-use App\Models\Category;
 
 use App\Http\Controllers\ImageCacheController;
 
@@ -54,10 +53,8 @@ Route::middleware(['auth:api', 'isAdmin'])->group(function () {
     });
 });
 
-Route::get('/products',           [ProductController::class, 'index']);
+Route::get('/products',           [ProductController::class, 'index'])->middleware('cache.json:5');
 Route::get('/products/{product}', [ProductController::class, 'show']);
-Route::get('/categories', function () {
-    return response()->json(['data' => Category::select('id', 'name')->get()]);
-});
+Route::get('/categories', [CategoryController::class, 'index'])->middleware('cache.json:5');
 
 Route::get('/storage/{path}', [ImageCacheController::class, 'show'])->where('path', '.*');

@@ -17,9 +17,11 @@ class OrderFactory extends Factory
             'shipping_address' => [
                 'line1' => fake()->streetAddress(),
                 'city' => fake()->city(),
-                'phone' => fake()->phoneNumber()
+                'zip_code' => fake()->postcode(),
+                'country' => 'Egypt',
             ],
-            'payment_method' => 'cash_on_delivery',
+            'phone' => '+201' . fake()->randomNumber(9, true),
+            'payment_method' => fake()->randomElement(['cash_on_delivery', 'credit_card']),
         ];
     }
 }

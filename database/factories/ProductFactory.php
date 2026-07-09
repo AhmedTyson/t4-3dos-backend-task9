@@ -12,13 +12,16 @@ class ProductFactory extends Factory
     {
         $name = $this->faker->words(3, true);
         return [
-            'category_id' => Category::factory(),
+            'category_id' => Category::inRandomOrder()->value('id') ?? Category::factory(),
             'name' => $name,
             'description' => $this->faker->paragraph,
-            'size' => $this->faker->randomElement(['S', 'M', 'L']),
+            'size' => $this->faker->randomElement(['S', 'M', 'L', 'XL', 'Standard', 'Compact', 'Full Size', '75%', 'One Size', '27 inch', '34 inch', '2m', 'Standard']),
             'base_price' => $this->faker->randomFloat(2, 10, 500),
+            'stock' => $this->faker->numberBetween(20, 100),
             'in_stock' => true,
-            'images' => [],
+            'images' => [
+                'https://picsum.photos/seed/' . Str::slug($name) . '/400/300.jpg',
+            ],
         ];
     }
 }

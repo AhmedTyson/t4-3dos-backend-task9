@@ -12,7 +12,7 @@ class CartItemFactory extends Factory
     {
         return [
             'cart_id'    => Cart::factory(),
-            'product_id' => fn() => Product::inRandomOrder()->first()->id,
+            'product_id' => Product::inRandomOrder()->value('id') ?? Product::factory(),
             'quantity'   => fake()->numberBetween(1, 5),
         ];
     }

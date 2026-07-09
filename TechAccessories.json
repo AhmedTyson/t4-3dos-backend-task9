@@ -285,13 +285,13 @@
                 {
                   "key": "per_page",
                   "value": "",
-                  "description": "Items per page (optional)",
+                  "description": "Items per page (optional, max 100)",
                   "disabled": true
                 },
                 {
                   "key": "category_id",
                   "value": "",
-                  "description": "Filter by category (optional)",
+                  "description": "Filter by category ID (optional)",
                   "disabled": true
                 },
                 {
@@ -311,10 +311,16 @@
                   "value": "",
                   "description": "Search by product name or description (optional)",
                   "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "",
+                  "description": "Sort: price_asc, price_desc, newest",
+                  "disabled": true
                 }
               ]
             },
-            "description": "List all products (filterable, paginated). Public."
+            "description": "List all products (filterable, paginated, cached 60min). Public."
           },
           "response": []
         },
@@ -398,6 +404,11 @@
                   "type": "text"
                 },
                 {
+                  "key": "stock",
+                  "value": "50",
+                  "type": "text"
+                },
+                {
                   "key": "in_stock",
                   "value": "1",
                   "type": "text"
@@ -406,7 +417,7 @@
                   "key": "images[]",
                   "value": "",
                   "type": "file",
-                  "description": "Upload product images"
+                  "description": "Upload product images (multiple allowed)"
                 }
               ]
             }
@@ -474,9 +485,26 @@
                   "type": "text"
                 },
                 {
+                  "key": "stock",
+                  "value": "40",
+                  "type": "text"
+                },
+                {
                   "key": "in_stock",
                   "value": "1",
                   "type": "text"
+                },
+                {
+                  "key": "image",
+                  "value": "",
+                  "type": "file",
+                  "description": "Upload single product image (file upload)"
+                },
+                {
+                  "key": "image_url",
+                  "value": "",
+                  "type": "text",
+                  "description": "Or provide image URL instead of file upload"
                 }
               ]
             }
@@ -510,6 +538,79 @@
               ]
             },
             "description": "Soft delete a product. Admin only. 409 if has order history."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2b. Categories Module",
+      "description": "Public category list + Admin create.",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "List all categories (cached 60min). Public."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/categories",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categories"
+              ]
+            },
+            "description": "Create a new category. Admin only.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Category Name\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
           },
           "response": []
         }
@@ -707,7 +808,7 @@
             "description": "Place a new order from the current cart. Owner only. Cart cleared on success.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"shipping_address\": {\n    \"street\": \"123 Street\",\n    \"city\": \"Cairo\",\n    \"zip_code\": \"12345\",\n    \"country\": \"Egypt\"\n  },\n  \"payment_method\": \"cash_on_delivery\"\n}",
+              "raw": "{\n  \"shipping_address\": {\n    \"street\": \"123 Street\",\n    \"city\": \"Cairo\",\n    \"zip_code\": \"12345\",\n    \"country\": \"Egypt\"\n  },\n  \"payment_method\": \"cash_on_delivery\",\n  \"phone\": \"+201012345678\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -734,7 +835,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/orders?page=1",
+              "raw": "{{base_url}}/orders?page=1&per_page=10",
               "host": [
                 "{{base_url}}"
               ],
@@ -744,7 +845,13 @@
               "query": [
                 {
                   "key": "page",
-                  "value": "1"
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "10",
+                  "description": "Items per page (max 100)"
                 }
               ]
             },
@@ -852,7 +959,38 @@
               "query": [
                 {
                   "key": "page",
-                  "value": "1"
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "20",
+                  "description": "Items per page (1-100, default 20)"
+                },
+                {
+                  "key": "status",
+                  "value": "",
+                  "description": "Filter by status: pending, approved, shipped, completed, cancelled"
+                },
+                {
+                  "key": "date_from",
+                  "value": "",
+                  "description": "Filter orders from date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "date_to",
+                  "value": "",
+                  "description": "Filter orders to date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "min_total",
+                  "value": "",
+                  "description": "Minimum order total"
+                },
+                {
+                  "key": "max_total",
+                  "value": "",
+                  "description": "Maximum order total"
                 }
               ]
             },
@@ -893,7 +1031,7 @@
                 "status"
               ]
             },
-            "description": "Update an order status. Admin only.",
+            "description": "Update an order status. Admin only. Status transitions: pending→approved|cancelled, approved→shipped|cancelled, shipped→completed.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"approved\"\n}",
@@ -966,7 +1104,13 @@
               "query": [
                 {
                   "key": "page",
-                  "value": "1"
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15",
+                  "description": "Items per page (1-100, default 15)"
                 }
               ]
             },
@@ -991,7 +1135,7 @@
               }
             ],
             "url": {
-              "raw": "{{base_url}}/admin/reports/sales",
+              "raw": "{{base_url}}/admin/reports/sales?from=2024-01-01&to=2024-12-31&format=json",
               "host": [
                 "{{base_url}}"
               ],
@@ -999,9 +1143,26 @@
                 "admin",
                 "reports",
                 "sales"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2024-01-01",
+                  "description": "Report start date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "to",
+                  "value": "2024-12-31",
+                  "description": "Report end date (YYYY-MM-DD)"
+                },
+                {
+                  "key": "format",
+                  "value": "json",
+                  "description": "Output format: json, xlsx, pdf"
+                }
               ]
             },
-            "description": "Get a sales summary report (Excel/PDF). Admin only."
+            "description": "Get a sales summary report. Admin only. Supports json, xlsx, pdf formats."
           },
           "response": []
         }

@@ -9,6 +9,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
@@ -37,6 +38,8 @@ class ProductController extends Controller
         $product = Product::create($data);
         $product->load('category');
 
+        $this->clearProductCache();
+
         return response()->json([
             'message' => 'Product created successfully',
             'data'    => new ProductResource($product),
@@ -61,6 +64,8 @@ class ProductController extends Controller
         $data['images'] = $this->handleImages($request, $product->images ?? []);
         $product->update($data);
 
+        $this->clearProductCache();
+
         return response()->json([
             'message' => 'Product updated successfully',
             'data'    => new ProductResource($product),
@@ -72,6 +77,8 @@ class ProductController extends Controller
         Gate::authorize('delete', $product);
 
         $product->delete();
+
+        $this->clearProductCache();
 
         return response()->json([
             'message' => 'Product deleted successfully',
@@ -91,5 +98,11 @@ class ProductController extends Controller
         }
 
         return $existing;
+    }
+
+    private function clearProductCache(): void
+    {
+        Cache::flush(); // Simple approach - flush all cache
+        // For production, use: Cache::tags('products')->flush();
     }
 }
