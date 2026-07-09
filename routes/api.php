@@ -9,6 +9,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Models\Category;
 
 use App\Http\Controllers\ImageCacheController;
 
@@ -50,7 +51,7 @@ Route::middleware(['auth:api', 'isAdmin'])->group(function () {
 Route::get('/products',           [ProductController::class, 'index'])->middleware('cache.json:5');
 Route::get('/products/{product}', [ProductController::class, 'show'])->middleware('cache.json:5');
 Route::get('/categories', function () {
-    return response()->json(['data' => \App\Models\Category::select('id', 'name')->get()]);
+    return response()->json(['data' => Category::select('id', 'name')->get()]);
 })->middleware('cache.json:5');
 
 Route::get('/storage/{path}', [ImageCacheController::class, 'show'])->where('path', '.*');
